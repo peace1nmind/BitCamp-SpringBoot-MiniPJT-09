@@ -13,9 +13,7 @@ public class TranCodeMapper {
 	
 	// Constructor
 	private TranCodeMapper() {
-		
-		System.out.println("\ncom.model2.mvc.service.purchase");
-		System.out.println("TranCodeMapper");
+		System.out.println("\t:: "+getClass().getSimpleName()+" default constructor call");
 	}
 
 	
