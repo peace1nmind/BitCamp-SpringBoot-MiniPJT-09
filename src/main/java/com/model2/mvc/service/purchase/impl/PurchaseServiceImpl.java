@@ -4,6 +4,7 @@ package com.model2.mvc.service.purchase.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 	// Field
 	@Autowired
-	@Qualifier("purchaseDaoImpl")
+	@Qualifier("purchaseDao")
 	private PurchaseDao purchaseDao;
 	
 	@Autowired
@@ -34,6 +35,10 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 	// Constructor
 	public PurchaseServiceImpl() {
+	}
+	
+	private RowBounds getRowBounds(Search search) {
+		return new RowBounds((search.getCurrentPage()-1) * search.getPageSize(), search.getPageSize());
 	}
 
 	@Override
@@ -90,7 +95,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
-			map.put("list", purchaseDao.selectPurchaseList(search, buyerId));
+			map.put("list", purchaseDao.selectPurchaseList(search, buyerId, getRowBounds(search)));
 			map.put("count", purchaseDao.countPurchaseList(buyerId));
 			
 		} catch (Exception e) {
@@ -107,7 +112,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
-			map.put("list", purchaseDao.selectPurchaseHistoryList(search, buyerId));
+			map.put("list", purchaseDao.selectPurchaseHistoryList(search, buyerId, getRowBounds(search)));
 			map.put("count", purchaseDao.countPurchaseHistoryList(buyerId));
 			
 		} catch (Exception e) {
@@ -124,7 +129,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
-			map.put("list", purchaseDao.selectSaleList(search));
+			map.put("list", purchaseDao.selectSaleList(search, getRowBounds(search)));
 			map.put("count", purchaseDao.countSaleList(search));
 			
 		} catch (Exception e) {

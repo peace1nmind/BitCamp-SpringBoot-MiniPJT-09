@@ -16,7 +16,7 @@ import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseDao;
 
 @Repository("purchaseDaoImpl")
-public class PurchaseDaoImpl implements PurchaseDao {
+public class PurchaseDaoImpl_NoUse implements PurchaseDao {
 
 	// Field
 	@Autowired
@@ -32,7 +32,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	// Constructor
-	public PurchaseDaoImpl() {
+	public PurchaseDaoImpl_NoUse() {
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public List<Purchase> selectPurchaseList(Search search, String buyerId) {
+	public List<Purchase> selectPurchaseList(Search search, String buyerId, RowBounds rowBounds) {
 		
 		List<Purchase> list = sqlSession.selectList("PurchaseMapper.selectPurchaseList", 
 													buyerId, 
@@ -84,7 +84,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public List<Purchase> selectPurchaseHistoryList(Search search, String buyerId) {
+	public List<Purchase> selectPurchaseHistoryList(Search search, String buyerId, RowBounds rowBounds) {
 		
 		List<Purchase> list = sqlSession.selectList("PurchaseMapper.selectPurchaseHistoryList", 
 													buyerId,
@@ -107,7 +107,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public List<Purchase> selectSaleList(Search search) {
+	public List<Purchase> selectSaleList(Search search, RowBounds rowBounds) {
 		
 		List<Purchase> list = sqlSession.selectList("PurchaseMapper.selectSaleList", 
 													search, 

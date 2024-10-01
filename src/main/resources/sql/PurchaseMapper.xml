@@ -4,7 +4,7 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">		
  					
-<mapper namespace="PurchaseMapper">
+<mapper namespace="com.model2.mvc.service.purchase.PurchaseDao">
 	
 	<!-- DB Column과 VO의 Field 맵핑 -->
 	<!-- TypeHandler가 필요하다 -->
@@ -20,7 +20,7 @@
 		<result property="tranCode" 			column="tran_status_code" 	jdbcType="CHAR"/>
 		<result property="orderDate" 			column="order_date" 		jdbcType="DATE"/>
 		<result property="dlvyDate" 			column="dlvy_date" 			jdbcType="DATE"/>
-		<association property="purchaseProd" 	column="prod_no"			select="ProductMapper.selectProduct"></association>
+		<association property="purchaseProd" 	column="prod_no"			select="com.model2.mvc.service.product.ProductDao.selectProduct"></association>
 		<association property="buyer"			column="buyer_id"			select="UserMapper.getUser"></association>
 	</resultMap>
 	

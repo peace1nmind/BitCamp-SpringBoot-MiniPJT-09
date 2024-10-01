@@ -14,7 +14,7 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductDao;
 
 @Repository("productDaoImpl")
-public class ProductDaoImpl implements ProductDao {
+public class ProductDaoImpl_NoUse implements ProductDao {
 
 	// Field
 	@Autowired
@@ -26,11 +26,11 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	// Constructor
-	public ProductDaoImpl() {
+	public ProductDaoImpl_NoUse() {
 	}
 
 	@Override
-	public List<Product> selectProductList(Search search) {
+	public List<Product> selectProductList(Search search, RowBounds rowBounds) {
 
 		return sqlSession.selectList("ProductMapper.selectProductList", 
 									 search, 

@@ -3,14 +3,18 @@ package com.model2.mvc.service.product;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
+
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
 
+@Mapper
 public interface ProductDao {
 	
 	// 판매하는 상품리스트 (tranCode=1)
 	// Search에 orderBy, desc 있음 (정렬원하는 컬럼이 있을시 사용)
-	public List<Product> selectProductList(Search search);
+	public List<Product> selectProductList(Search search, RowBounds rowBounds);
 	
 	// selectProductList의 totalCount
 	public int selectTotalCount(Search search);

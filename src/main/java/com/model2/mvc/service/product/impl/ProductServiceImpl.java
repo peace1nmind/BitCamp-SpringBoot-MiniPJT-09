@@ -4,6 +4,7 @@ package com.model2.mvc.service.product.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,16 @@ public class ProductServiceImpl implements ProductService {
 
 	// Field
 	@Autowired
-	@Qualifier("productDaoImpl")
+	@Qualifier("productDao")
 	private ProductDao productDao;
 
 	// Constructor
 	public ProductServiceImpl() {
 		System.out.println(":: " +  getClass().getSimpleName() + " default Constructor call\n");
+	}
+	
+	private RowBounds getRowBounds(Search search) {
+		return new RowBounds(search.getStartRowNum(), search.getPageSize());
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 	public Map<String, Object> getProductList(Search search) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", productDao.selectProductList(search));
+		map.put("list", productDao.selectProductList(search, getRowBounds(search)));
 		map.put("count", productDao.selectTotalCount(search));
 		
 		return map;

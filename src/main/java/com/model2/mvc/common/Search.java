@@ -31,24 +31,18 @@ public class Search {
 	public Search() {
 	}
 	
-	public Search(ServletContext servletContext) {
-		if (servletContext != null) {
-			pageSize = Integer.parseInt(servletContext.getInitParameter("pageSize"));
-		} else {
-			throw new NullPointerException("servletContext is null");
-		}
-	}
-	
 	public Search(int currentPage, int pageSize) {
 		super();
 		this.currentPage = currentPage;
 		this.pageSize = pageSize;
 	}
 
+	
 	///Method
 	public int getPageSize() {
 		return pageSize;
 	}
+	
 	public void setPageSize(int paseSize) {
 		this.pageSize = paseSize;
 	}
@@ -110,7 +104,7 @@ public class Search {
 	}
 	//==> Select Query 시 ROWNUM 시작 값
 	public int getStartRowNum() {
-		return (getCurrentPage()-1)*getPageSize()+1;
+		return (getCurrentPage()-1)*getPageSize();
 	}
 	
 	public String getOrderBy() {
@@ -133,8 +127,8 @@ public class Search {
 	public String toString() {
 		return "Search [currentPage=" + currentPage + ", searchCondition="
 				+ searchCondition + ", searchKeyword=" + searchKeyword
-				+ ", pageSize=" + pageSize + ", endRowNum=" + endRowNum
-				+ ", startRowNum=" + startRowNum + ""
+				+ ", pageSize=" + pageSize + ", endRowNum=" + getEndRowNum()
+				+ ", startRowNum=" + getStartRowNum() + ""
 				+ ", page=" + page + ", orderBy=" + orderBy +", desc=" + desc +" ]";
 	}
 }
