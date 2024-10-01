@@ -34,8 +34,7 @@ public class Product {
 	}
 
 	public void setFile(MultipartFile file) {
-		System.out.println("\n\n"+file.getOriginalFilename());
-		System.out.println("\n");
+		System.out.println(file.getOriginalFilename());
 		
 		if (file.getSize() != 0) {
 			String fileFullName = file.getOriginalFilename();

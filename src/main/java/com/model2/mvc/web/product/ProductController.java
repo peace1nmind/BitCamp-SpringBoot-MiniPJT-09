@@ -216,9 +216,9 @@ public class ProductController {
 			String uploadFileName = uuid + fileExtension;
 			
 			product.getFile().transferTo(new File(uploadDir + uploadFileName));
+			Thread.sleep(2000);
 			
 			product.setFileName(uploadFileName);
-			Thread.sleep(3000);
 			
 		} else if (beforeProduct.getFileName() != null && !beforeProduct.getFileName().equals("")) {
 			product.setFileName(beforeProduct.getFileName());
@@ -245,7 +245,7 @@ public class ProductController {
 	
 	@PostMapping("/addProduct")
 	public String addProduct(@ModelAttribute("product") Product product,
-							Model model) {
+							Model model) throws InterruptedException {
 		
 		System.out.println("/product/addProduct POST");
 		
@@ -258,10 +258,10 @@ public class ProductController {
 			System.out.println("업로드할 디렉토리 : "+uploadDir);
 			System.out.println("\n");
 			File uploadFile = new File(uploadDir+uploadFileName);
+			Thread.sleep(2000);
 			
 			try {
 				product.getFile().transferTo(uploadFile);
-				Thread.sleep(3000);
 				
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
@@ -269,8 +269,6 @@ public class ProductController {
 			} catch (IOException e) {
 				e.printStackTrace();
 				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 			
 			product.setFileName(uploadFileName);

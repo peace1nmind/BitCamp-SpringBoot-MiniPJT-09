@@ -140,7 +140,7 @@
 							
 							<c:choose>
 								
-								<c:when test="${user.role=='admin' }">
+								<c:when test="${user.role=='admin' && product.proTranCode=='1'}">
 							
 									<td width="17" height="23">
 										<img src="/images/ct_btnbg01.gif" width="17" height="23"/>

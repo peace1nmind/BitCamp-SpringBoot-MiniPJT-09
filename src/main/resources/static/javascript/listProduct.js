@@ -33,6 +33,11 @@ $(function() {
 	
 	$(".ct_list_pop span").click(function() {
 		var prodNo = $(this).data("prodno");
+		
+		if ($(this).data("menu") != undefined) {
+			menu = $(this).data("menu");
+		}
+		
 		console.log("listProduct - prodNo : "+prodNo);
 		var navi = (menu !=null && menu == "search")? "getProduct" : "updateProduct";
 		linkTo("/product/"+navi+"?menu=search&prodNo="+prodNo);
