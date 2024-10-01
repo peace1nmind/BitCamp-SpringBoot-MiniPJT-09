@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">		
+ 					
+<mapper namespace="PurchaseMapper">
+	
+	<!-- DB Column과 VO의 Field 맵핑 -->
+	<!-- TypeHandler가 필요하다 -->
+	<!-- 		<result property="purchaseProd.prodNo" 	column="prod_no" 			jdbcType="INTEGER"/> -->
+	<!-- 		<result property="buyer.userId" 		column="buyer_id" 			jdbcType="VARCHAR"/> -->
+	<resultMap type="purchase" id="purchaseSelectMap">
+		<id 	property="tranNo" 				column="tran_no" 			jdbcType="INTEGER"/>
+		<result property="paymentOption" 		column="payment_option" 	jdbcType="CHAR"/>
+		<result property="receiverName" 		column="receiver_name" 		jdbcType="VARCHAR"/>
+		<result property="receiverPhone" 		column="receiver_phone" 	jdbcType="VARCHAR"/>
+		<result property="dlvyAddr" 			column="dlvy_addr" 			jdbcType="VARCHAR"/>
+		<result property="dlvyRequest" 			column="dlvy_request" 		jdbcType="VARCHAR"/>
+		<result property="tranCode" 			column="tran_status_code" 	jdbcType="CHAR"/>
+		<result property="orderDate" 			column="order_date" 		jdbcType="DATE"/>
+		<result property="dlvyDate" 			column="dlvy_date" 			jdbcType="DATE"/>
+		<association property="purchaseProd" 	column="prod_no"			select="ProductMapper.selectProduct"></association>
+		<association property="buyer"			column="buyer_id"			select="UserMapper.getUser"></association>
+	</resultMap>
+	
+	
+	<!-- selectPurchase: 구매정보 조회 -->
+	<select id="selectPurchase"
+			parameterType="java.lang.Integer"
+			resultMap="purchaseSelectMap">
+	
+		SELECT
+		tran_no, prod_no, buyer_id, 
+		payment_option, 
+		receiver_name, receiver_phone, 
+		dlvy_addr, dlvy_request, 
+		tran_status_code, 
+		order_date, dlvy_date 
+		FROM transaction
+		WHERE tran_no = #{tranNo} 
+			
+	</select>
+	
+	
+	<!-- selectPurchaseByProd: prodNo로 구매정보 조회 -->
+	<select id="selectPurchaseByProd"
+			resultMap="purchaseSelectMap">
+	
+		SELECT
+		tran_no, prod_no, buyer_id, 
+		payment_option, 
+		receiver_name, receiver_phone, 
+		dlvy_addr, dlvy_request, 
+		tran_status_code, 
+		order_date, dlvy_date 
+		FROM transaction
+		WHERE prod_no = #{prodNo} 
+			
+	</select>
+	
+	
+	<!-- insertPurchae: 구매 -->
+	<insert id="insertPurchase"
+			parameterType="purchase">
+	
+		INSERT INTO transaction
+		VALUES (seq_transaction_tran_no.NEXTVAL,
+			    #{purchaseProd.prodNo, jdbcType=INTEGER},
+			    #{buyer.userId, jdbcType=VARCHAR},
+			    #{paymentOption, jdbcType=VARCHAR},
+			    #{receiverName, jdbcType=VARCHAR},
+			    #{receiverPhone, jdbcType=VARCHAR},
+			    #{dlvyAddr, jdbcType=VARCHAR},
+			    #{dlvyRequest, jdbcType=VARCHAR},
+			    '2',
+			    SYSDATE,
+			    TO_DATE(#{dlvyDate, jdbcType=DATE}, 'YY-MM-DD')
+			   )
+		
+			
+	</insert>
+	
+	
+	<!-- selectPurchaseList: 구매이력 조회 (구매완료~배송중) -->
+	<!-- RowBouns 사용해보기 RowBounds(offset, limit) -->
+	<select id="selectPurchaseList"
+			parameterType="string"
+			resultMap="purchaseSelectMap">
+	
+		SELECT * 
+		FROM transaction
+		WHERE buyer_id = #{buyerId}
+		AND tran_status_code BETWEEN 2 AND 3
+		ORDER BY order_date DESC
+				
+	</select>
+	
+	
+	<!-- countPurchaseList -->
+	<select id="countPurchaseList"
+			resultType="java.lang.Integer">
+	
+		SELECT COUNT(*)
+		FROM (SELECT * 
+			  FROM transaction
+			  WHERE buyer_id = #{buyerId}
+			  AND tran_status_code BETWEEN 2 AND 3
+			  )
+			
+	</select>
+	
+	
+	<!-- selectPurchaseHistoryList: 구매이력 조회 (배송완료~) -->
+	<select id="selectPurchaseHistoryList"
+			parameterType="string"
+			resultMap="purchaseSelectMap">
+	
+		SELECT * 
+		FROM transaction
+		WHERE buyer_id = #{buyerId}
+		AND tran_status_code &gt;= 4
+		ORDER BY order_date DESC
+					
+	</select>
+	
+	
+	<!-- countPurchaseHistoryList -->
+	<select id="countPurchaseHistoryList"
+			resultType="java.lang.Integer">
+	
+		SELECT COUNT(*)
+		FROM (	SELECT * 
+				FROM transaction
+				WHERE buyer_id = #{buyerId}
+				AND tran_status_code &gt;= 4
+			 )
+			
+	</select>
+	
+	
+	<!-- selectSaleList: 판매완료 상품리스트 조회 (관리자) -->
+	<!-- RowBounds 사용 -->
+	<select id="selectSaleList"
+			parameterType="search"
+			resultMap="purchaseSelectMap">
+	
+		SELECT t.* 
+		FROM transaction t, 
+			(SELECT
+			prod_no
+			FROM product
+			
+			<where>
+				pro_tran_code &gt;= '2'
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<choose>
+						<!-- 상품명 검색 -->
+						<when test="searchCondition == 1">
+							AND prod_name LIKE '%'||#{searchKeyword}||'%'
+						</when>
+						
+						<!-- 상품설명 -->
+						<when test="searchCondition == 2">
+							AND prod_detail LIKE '%'||#{searchKeyword}||'%'
+						</when>
+						
+						<!-- 기본 상품번호 검색 -->
+						<otherwise>
+							AND prod_no LIKE '%'||#{searchKeyword}||'%'
+						</otherwise>
+					</choose>
+				</if>
+				
+				<!-- 가격 범위검색 -->
+				<if test="searchPriceBigger != 0">
+					AND price &gt;= #{searchPriceBigger:INTEGER}
+				</if>
+				<if test="searchPriceLess != 0">
+					AND price &lt;= #{searchPriceLess:INTEGER}
+				</if>
+				
+			</where>) p
+		WHERE t.prod_no = p.prod_no
+		AND t.tran_status_code &gt;= 2
+		ORDER BY t.tran_status_code, t.order_date DESC, t.tran_no
+			
+	</select>
+	
+	
+	<!-- countSaleList -->
+	<select id="countSaleList"
+			parameterType="search"
+			resultType="java.lang.Integer">
+		
+		SELECT COUNT(*)
+		FROM (	SELECT t.* 
+				FROM transaction t, 
+					(SELECT
+					prod_no
+					FROM product
+					
+					<where>
+						pro_tran_code &gt;= '2'
+						<if test="searchKeyword != null and searchKeyword != ''">
+							<choose>
+								<!-- 상품명 검색 -->
+								<when test="searchCondition == 1">
+									AND prod_name LIKE '%'||#{searchKeyword}||'%'
+								</when>
+								
+								<!-- 상품설명 -->
+								<when test="searchCondition == 2">
+									AND prod_detail LIKE '%'||#{searchKeyword}||'%'
+								</when>
+								
+								<!-- 기본 상품번호 검색 -->
+								<otherwise>
+									AND prod_no LIKE '%'||#{searchKeyword}||'%'
+								</otherwise>
+							</choose>
+						</if>
+						
+						<!-- 가격 범위검색 -->
+						<if test="searchPriceBigger != 0">
+							AND price &gt;= #{searchPriceBigger:INTEGER}
+						</if>
+						<if test="searchPriceLess != 0">
+							AND price &lt;= #{searchPriceLess:INTEGER}
+						</if>
+						
+					</where>) p
+				WHERE t.prod_no = p.prod_no
+				AND t.tran_status_code &gt;= 2
+			 )
+	
+	</select>
+	
+	
+	<!-- updatePurchase: 구매정보 수정 -->
+	<update id="updatePurchase"
+			parameterType="purchase">
+	
+		UPDATE transaction
+		
+		<set>
+			payment_option = #{paymentOption:CHAR},
+			receiver_name = #{receiverName},
+			receiver_phone = #{receiverPhone},
+			dlvy_addr = #{dlvyAddr},
+			dlvy_request = #{dlvyRequest},
+			dlvy_date = #{dlvyDate, jdbcType=DATE}
+		</set>
+		
+		WHERE tran_no = #{tranNo}
+				
+	</update>
+	
+	
+	<!-- updateTranStatusCode: tranCode 수정 -->
+	<update id="updateTranStatusCode"
+			parameterType="purchase">
+		
+		UPDATE transaction
+		SET tran_status_code = #{tranCode:CHAR}
+		WHERE tran_no = #{tranNo:INTEGER}
+				
+	</update>
+	
+	
+</mapper>

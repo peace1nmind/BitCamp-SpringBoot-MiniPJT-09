@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">		
+ 					
+<mapper namespace="ProductMapper">
+	
+	<!-- DB Column과 VO의 Field 맵핑 -->
+	<resultMap type="product" id="productSelectMap">
+		<id 	property="prodNo" 		column="prod_no" 			jdbcType="INTEGER"/>
+		<result property="prodName" 	column="prod_name" 			jdbcType="VARCHAR"/>
+		<result property="prodDetail" 	column="prod_detail" 		jdbcType="VARCHAR"/>
+		<result property="manuDate" 	column="manufacture_day" 	jdbcType="VARCHAR"/>
+		<result property="price" 		column="price" 				jdbcType="INTEGER"/>
+		<result property="fileName" 	column="image_file" 		jdbcType="VARCHAR"/>
+		<result property="regDate" 		column="reg_date" 			jdbcType="DATE"/>
+		<result property="proTranCode" 	column="pro_tran_code" 		jdbcType="CHAR"/>
+	</resultMap>
+	
+	<!-- selectProductList: 판매상품 리스트 -->
+	<select id="selectProductList"
+			parameterType="search"
+			resultMap="productSelectMap">
+			
+		SELECT
+		prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, pro_tran_code
+		FROM product
+		
+		<where>
+			pro_tran_code = '1'
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<choose>
+					<!-- 상품명 검색 -->
+					<when test="searchCondition == 1">
+						AND prod_name LIKE '%'||#{searchKeyword}||'%'
+					</when>
+					
+					<!-- 상품설명 -->
+					<when test="searchCondition == 2">
+						AND prod_detail LIKE '%'||#{searchKeyword}||'%'
+					</when>
+					
+					<!-- 기본 상품번호 검색 -->
+					<otherwise>
+						AND prod_no LIKE '%'||#{searchKeyword}||'%'
+					</otherwise>
+				</choose>
+			</if>
+			
+			<!-- 가격 범위검색 -->
+			<if test="searchPriceBigger != 0">
+				AND price &gt;= #{searchPriceBigger:INTEGER}
+			</if>
+			<if test="searchPriceLess != 0">
+				AND price &lt;= #{searchPriceLess:INTEGER}
+			</if>
+			
+		</where>
+		
+		<trim prefix="ORDER BY" prefixOverrides=",">
+			<if test="orderBy != null and orderBy != ''">${orderBy} <if test="desc">DESC</if></if>
+			, reg_date DESC NULLS LAST, prod_no 
+		</trim>	
+		
+	</select>
+	
+	
+	<!-- selectTotalCount -->
+	<select id="selectTotalCount"
+			parameterType="search"
+			resultType="int">
+	
+		SELECT COUNT(*) 
+		FROM (	SELECT
+			 	prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, pro_tran_code
+			 	FROM product
+			 	
+			 	<where>
+					pro_tran_code = '1'
+					<if test="searchKeyword !=null and searchKeyword != ''">
+						<choose>
+							<!-- 상품명 검색 -->
+							<when test="searchCondition == 1">
+								AND prod_name LIKE '%'||#{searchKeyword}||'%'
+							</when>
+							
+							<!-- 상품설명 -->
+						<when test="searchCondition == 2">
+							AND prod_detail LIKE '%'||#{searchKeyword}||'%'
+						</when>
+							
+							<!-- 기본 상품번호 검색 -->
+							<otherwise>
+								AND prod_no LIKE '%'||#{searchKeyword}||'%'
+							</otherwise>
+						</choose>
+					</if>
+					
+					<!-- 가격 범위검색 -->
+					<if test="searchPriceBigger != 0">
+						AND price &gt;= #{searchPriceBigger:INTEGER}
+					</if>
+					<if test="searchPriceLess != 0">
+						AND price &lt;= #{searchPriceLess:INTEGER}
+					</if>
+						
+				</where>
+				
+			 ) countTable
+	
+	</select>
+	
+	
+	<!-- selectProduct: 상품정보 조회 -->
+	<select id="selectProduct"
+			parameterType="int"
+			resultMap="productSelectMap">
+		
+		SELECT
+		prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, pro_tran_code
+		FROM product
+		WHERE prod_no = #{prodNo}
+		
+	</select>
+	
+	
+	<!-- selectCurrentProduct: 가장 최근 등록 상품정보 조회 -->
+	<select id="selectCurrentProduct"
+			resultMap="productSelectMap">
+			
+		SELECT *
+		FROM product
+		WHERE prod_no = (SELECT MAX(prod_no) FROM product)
+			
+	</select>
+	
+	
+	<!-- insertProduct: 상품등록 -->
+	<insert id="insertProduct"
+			parameterType="product">
+		
+		INSERT INTO product
+		VALUES (seq_product_prod_no.NEXTVAL,
+				#{prodName},
+				<if test="prodDetail == null">null</if>
+				<if test="prodDetail != null">#{prodDetail}</if>,
+				<if test="manuDate == null">null</if> 
+				<if test="manuDate != null">#{manuDate:CHAR}</if>,
+				#{price:INTEGER},
+				<if test="fileName == null">null</if>
+				<if test="fileName != null">#{fileName}</if>,
+				SYSDATE,
+				'1')
+		
+	</insert>
+	
+	
+	<!-- updateProduct: 상품정보 수정 -->
+	<update id="updateProduct"
+			parameterType="product">
+			
+		UPDATE product
+		<set>
+			<if test="prodName != null">prod_name = #{prodName},</if> 
+			<if test="prodDetail != null">prod_detail = #{prodDetail},</if> 
+			<if test="manuDate != null">manufacture_day = #{manuDate:VARCHAR},</if> 
+			price = #{price:INTEGER},
+			<if test="fileName != null">image_file = #{fileName:VARCHAR}</if> 
+		</set>
+		WHERE prod_no = #{prodNo:INTEGER}
+				
+	</update>
+	
+	
+	<!-- updateTranCode: pro_tran_code 변경 -->
+	<update id="updateTranCode"
+			parameterType="product">
+			
+		UPDATE product
+		SET pro_tran_code = #{proTranCode:CHAR}
+		WHERE prod_no = #{prodNo:INTEGER}
+				
+	</update>
+	
+	
+</mapper>
