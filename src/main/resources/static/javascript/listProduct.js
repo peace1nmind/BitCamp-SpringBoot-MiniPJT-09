@@ -17,6 +17,11 @@ function fncGetProductList(){
 $(function() {
 	
 	var menu = $("input[name='menu'").val();
+		
+	$("#productPrice span").each(function() {
+		var price = Number($(this).text().trim()).toLocaleString();
+		$(this).text(price);
+	});
 	
 	$("form").attr("action", "/product/listProduct").attr("method", "post");
 	
@@ -26,12 +31,18 @@ $(function() {
 
 		$("#page1").val(1);
 		$("#page2").val(2);
-		$("input[name='orderBy']").val("price");
+		
+		var orderBy = $("input[name='orderBy']").val();
+		
+		if (orderBy == null || orderBy == '') {
+			$("input[name='orderBy']").val("price");
+		}
+		
 		$("input[name='desc']").val(!desc);
 		$("form").submit();
 	});
 	
-	$(".ct_list_pop span").click(function() {
+	$(".ct_list_pop span[data-prodno]").click(function() {
 		var prodNo = $(this).data("prodno");
 		
 		if ($(this).data("menu") != undefined) {

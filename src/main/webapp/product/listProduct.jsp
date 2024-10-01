@@ -22,7 +22,7 @@
 		<script type="text/javascript" src="/javascript/listProduct.js"></script>
 		
 		<style type="text/css">
-			span:hover {cursor: pointer;}
+			span[data-prodno], span#orderByPrice:hover {cursor: pointer;}
 		</style>
 		
 	</head>
@@ -33,7 +33,7 @@
 			<div style="width:98%; margin-left:10px;">
 
 				<input type="hidden" name="menu" value="${menu }">
-				<input type="hidden" name="orderBy" value="">
+				<input type="hidden" name="orderBy" value="${search.orderBy }">
 				<input type="hidden" name="desc" value="${search.desc }">
 			
 				<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -160,7 +160,7 @@
 							</td>
 							
 							<td></td>
-							<td align="left">${product.price}</td>
+							<td align="left" id="productPrice"><span>${product.price}</span> ¿ø</td>
 							<td></td>
 							<td align="left">${product.regDate}</td>
 							<td></td>
