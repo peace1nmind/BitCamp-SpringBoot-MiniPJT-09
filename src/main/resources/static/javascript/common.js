@@ -1,17 +1,23 @@
-/* °øÅë JS */
+/* ï¿½ï¿½ï¿½ï¿½ JS */
 
 function linkTo(location) {
-	console.log("ÀÌµ¿ÇÏ´Â ¸µÅ©= "+location)
+	console.log("ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Å©= "+location)
 	$(window.parent.frames["rightFrame"].document.location).attr("href", location);
 }
 
 function toDateType(date) {
 	
-	if (!date.includes("-")) {
-		return date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
-		
-	} else {
-		return date;
-		
+	if (date == null) {
+		return "";
+	}
+	
+	else {	
+		if (!date.includes("-")) {
+			return date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+			
+		} else {
+			return date;
+			
+		}
 	}
 }

@@ -22,7 +22,7 @@
 		<script type="text/javascript" src="/javascript/listProduct.js"></script>
 		
 		<style type="text/css">
-			span[data-prodno], span#orderByPrice:hover {cursor: pointer;}
+			span[data-prodno], #orderByPrice:hover {cursor: pointer;}
 		</style>
 		
 	</head>
@@ -156,7 +156,7 @@
 							<td></td>
 									
 							<td align="left" id="prodName">
-								<span data-prodno="${product.prodNo }">${product.prodName}</span>
+								<span data-prodno="${product.prodNo }">${product.prodName}</span>&ensp;&ensp;<span data-prodno="${product.prodNo }">¡å</span>
 							</td>
 							
 							<td></td>
@@ -167,8 +167,12 @@
 							
 							<td align="left">
 								${tranCodeMap[product.proTranCode]}
-							</td>	
+							</td>
+		
 						</tr>
+						
+						<tr id="${product.prodNo }"><td colspan="10"></td></tr>
+						
 						<tr>
 							<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 						</tr>	

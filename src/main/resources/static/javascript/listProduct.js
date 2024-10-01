@@ -18,13 +18,17 @@ $(function() {
 	
 	var menu = $("input[name='menu'").val();
 		
+	$("form").attr("action", "/product/listProduct").attr("method", "post");
+	
+	
+	// listProduct, listSale price 값 형식 변경
 	$("#productPrice span").each(function() {
 		var price = Number($(this).text().trim()).toLocaleString();
 		$(this).text(price);
 	});
 	
-	$("form").attr("action", "/product/listProduct").attr("method", "post");
 	
+	// 가격 정렬 함수
 	$("#orderByPrice").click(function() {
 		var desc = $("input[name='desc']").val();
 		desc = (desc==null || desc=="false")? false: true;
@@ -42,7 +46,9 @@ $(function() {
 		$("form").submit();
 	});
 	
-	$(".ct_list_pop span[data-prodno]").click(function() {
+	
+	// getProduct
+	$(".ct_list_pop span[data-prodno]:nth-child(2n+1)").click(function() {
 		var prodNo = $(this).data("prodno");
 		
 		if ($(this).data("menu") != undefined) {
@@ -54,6 +60,62 @@ $(function() {
 		linkTo("/product/"+navi+"?menu=search&prodNo="+prodNo);
 	});
 	
+	
+	// 토글을 눌러서 상품정보 간편보기 (Ajax 사용)
+	$(".ct_list_pop span[data-prodno]:nth-child(2n+2)").click(function() {
+		var prodNo = $(this).data("prodno");
+		
+		$.ajax({
+			url : "/json/product/getProduct",
+			method : "GET",
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			data : "prodNo="+prodNo,
+			dataType : "json",
+			success : function(data) {
+
+				console.log("ajax success");
+				
+				var product = data.product;
+				console.log(JSON.stringify(product));
+				var display = "<table class='toggle' border='1'>"+
+								"<tr>"+
+									"<td rowspan='5'><img src='/images/uploadFiles/"+product.fileName+"' width='100' height='100'/></td>"+
+									"<td>상품명</td>"+
+									"<td>"+product.prodName+"</td>"+
+								"</tr>"+
+								"<tr>"+
+									"<td>상품상세정보</td>"+
+									"<td>"+product.prodDetail+"</td>"+
+								"</tr>"+
+								"<tr>"+
+									"<td>제조일자</td>"+
+									"<td>"+toDateType(product.manuDate)+"</td>"+
+								"</tr>"+
+								"<tr>"+
+									"<td>가격</td>"+
+									"<td>"+(product.price).toLocaleString()+"&nbsp;원</td>"+
+								"</tr>"+
+								"<tr>"+
+									"<td>등록일자</td>"+
+									"<td>"+product.regDate+"</td>"+
+								"</tr>"+
+							"</table>";
+
+				$("table.toggle").remove();
+				
+				$("#"+product.prodNo+" td").append($(display));
+							
+			}
+			
+		});
+		
+	});
+	
+	
+	// 검색버튼 함수
 	$(".ct_btn01").click(function() {
 		if ($(this).text().trim() == "검색"){
 			fncGetProductList();
