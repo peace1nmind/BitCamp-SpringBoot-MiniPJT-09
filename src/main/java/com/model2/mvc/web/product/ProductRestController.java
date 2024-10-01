@@ -192,93 +192,106 @@ public class ProductRestController {
 	}
 	
 	
-//	// 상품정보 수정
-//	@GetMapping("/updateProduct")
-//	public String updateProduct(@RequestParam("prodNo") int prodNo,
-//								Model model) throws Exception {
-//		
-//		System.out.println("Rest /updateProduct GET");
-//		
-//		responseMap.put("product", productService.getProduct(prodNo));
-//		responseMap.put("fnc", "update");
-//		
-//		return "/product/addAndUpdateProductView.jsp";
-//	}
-//	
-//	@PostMapping("/updateProduct")
-//	public String updateProduct(@ModelAttribute("product") Product product) 
-//								throws Exception {
-//		
-//		System.out.println("Rest /updateProduct POST");
-//		
-//		if (product.getFile().getSize() > 0) {
-//			String uuid = UUID.randomUUID().toString().split("-")[0];
-//			String fileExtension = product.getFileName().substring(product.getFileName().lastIndexOf("."));
-//			String uploadFileName = uuid + fileExtension;
-//			
-//			product.getFile().transferTo(new File(uploadDir + uploadFileName));
-//			
-//			product.setFileName(uploadFileName);
-//			Thread.sleep(3000);
-//		}
-//		
-//		productService.updateProduct(product);
-//		
-//		/* 원래는 다시 실어줘야하지만 기존과 동일하기때문에 다시 안 실어줘도됨 */
-//		
-//		return "forward:/product/updateProduct.jsp";
-//	}
-//	
-//	
-//	// 상품등록
-//	@GetMapping("/addProduct")
-//	public String addProduct(Model model) {
-//		
-//		System.out.println("Rest /product/addProduct GET");
-//		
-//		responseMap.put("fnc", "add");
-//		
-//		return "/product/addAndUpdateProductView.jsp";
-//	}
-//	
-//	@PostMapping("/addProduct")
-//	public String addProduct(@ModelAttribute("product") Product product,
-//							Model model) {
-//		
-//		System.out.println("Rest /product/addProduct POST");
-//		
-//		if (product.getFile().getSize() > 0) {
-//			// 파일이름이 겹칠수도 있고 보안의 문제로 랜덤된 파일 이름을 사용
-//			String uuid = UUID.randomUUID().toString().split("-")[0];
-//			String fileExtension = product.getFileName().substring(product.getFileName().lastIndexOf("."));
-//			String uploadFileName = uuid + fileExtension;
-//			
-//			System.out.println("업로드할 디렉토리 : "+uploadDir);
-//			System.out.println("\n");
-//			File uploadFile = new File(uploadDir+uploadFileName);
-//			
-//			try {
-//				product.getFile().transferTo(uploadFile);
-//				Thread.sleep(3000);
-//				
-//			} catch (IllegalStateException e) {
-//				e.printStackTrace();
-//				
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//				
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			product.setFileName(uploadFileName);
-//		}
-//		
-//		product = productService.addProduct(product);
-//		responseMap.put("product", product);
-//		
-//		return "/product/getProduct.jsp";
-//	}
+	// 상품정보 수정
+	@GetMapping("/updateProduct")
+	public Map<String, Object> updateProduct(@RequestParam("prodNo") int prodNo)
+							 throws Exception {
+		
+		System.out.println("Rest /updateProduct GET");
+		
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		
+		responseMap.put("product", productService.getProduct(prodNo));
+		responseMap.put("fnc", "update");
+		
+		return responseMap;
+	}
+	
+	@PostMapping("/updateProduct")
+	public Map<String, Object> updateProduct(@ModelAttribute("product") Product product) 
+								throws Exception {
+		
+		System.out.println("Rest /updateProduct POST");
+		
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		
+		Product beforeProduct = productService.getProduct(product.getProdNo());
+		
+		if (product.getFile().getSize() > 0) {
+			String uuid = UUID.randomUUID().toString().split("-")[0];
+			String fileExtension = product.getFileName().substring(product.getFileName().lastIndexOf("."));
+			String uploadFileName = uuid + fileExtension;
+			
+			product.getFile().transferTo(new File(uploadDir + uploadFileName));
+			Thread.sleep(2000);
+			
+			product.setFileName(uploadFileName);
+			
+		} else if (beforeProduct.getFileName() != null && !beforeProduct.getFileName().equals("")) {
+			product.setFileName(beforeProduct.getFileName());
+			
+		} 
+		
+		product = productService.updateProduct(product);
+		responseMap.put("product", product);
+		
+		return responseMap;
+	}
+	
+	
+	// 상품등록
+	@GetMapping("/addProduct")
+	public Map<String, Object> addProduct() {
+		
+		System.out.println("Rest /product/addProduct GET");
+		
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		
+		responseMap.put("fnc", "add");
+		
+		return responseMap;
+	}
+	
+	@PostMapping("/addProduct")
+	public Map<String, Object> addProduct(@ModelAttribute("product") Product product,
+							Model model) {
+		
+		System.out.println("Rest /product/addProduct POST");
+		
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		
+		if (product.getFile().getSize() > 0) {
+			// 파일이름이 겹칠수도 있고 보안의 문제로 랜덤된 파일 이름을 사용
+			String uuid = UUID.randomUUID().toString().split("-")[0];
+			String fileExtension = product.getFileName().substring(product.getFileName().lastIndexOf("."));
+			String uploadFileName = uuid + fileExtension;
+			
+			System.out.println("업로드할 디렉토리 : "+uploadDir);
+			System.out.println("\n");
+			File uploadFile = new File(uploadDir+uploadFileName);
+			
+			try {
+				product.getFile().transferTo(uploadFile);
+				Thread.sleep(3000);
+				
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			product.setFileName(uploadFileName);
+		}
+		
+		product = productService.addProduct(product);
+		responseMap.put("product", product);
+		
+		return responseMap;
+	}
 
 }
 // class end
