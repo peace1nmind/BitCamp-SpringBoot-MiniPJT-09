@@ -72,29 +72,6 @@
 			</li>
 		</ul>
 		
-		<table class='toggle' border='1'>
-			<tr>
-				<td rowspan='5'><img src='/images/uploadFiles/product.fileName' width='100' height='100'/></td>
-				<td>상품명</td>
-				<td>product.prodName</td>
-			</tr>
-			<tr>
-				<td>상품상세정보</td>
-				<td>product.prodDetail</td>
-			</tr>
-			<tr>
-				<td>제조일자</td>
-				<td>product.manuDate</td>
-			</tr>
-			<tr>
-				<td>가격</td>
-				<td>(product.price).toLocaleString()&nbsp;원</td>
-			</tr>
-			<tr>
-				<td>등록일자</td>
-				<td>product.regDate</td>
-			</tr>
-		</table>
 		
 	</body>
 	

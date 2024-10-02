@@ -189,7 +189,7 @@ public class PurchaseController {
 	
 	// 배송하기, 물건도착
 	// listSale (관리자)에서 배송하기 요청
-	@RequestMapping()
+	@RequestMapping("updateTranCode")
 	public ModelAndView updateTranCode(@RequestParam(value = "prodNo", required = false, defaultValue = "0") int prodNo,
 									   @RequestParam(value = "tranNo", required = false, defaultValue = "0") int tranNo,
 									   @RequestParam(value = "tranCode") String tranCode) {

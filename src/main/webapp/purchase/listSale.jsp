@@ -78,7 +78,7 @@
 					<td></td>
 					<%-- »óÇ°¸í --%>
 					<td align="left">
-						<span data-prodno="${purchase.purchaseProd.prodNo }" data-menu="search">${purchase.purchaseProd.prodName }</span>
+						<span data-tranno="${purchase.tranNo }">${purchase.purchaseProd.prodName }</span>
 					</td>
 
 					<td></td>

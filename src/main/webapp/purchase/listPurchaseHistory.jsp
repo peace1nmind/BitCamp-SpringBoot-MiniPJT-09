@@ -80,7 +80,7 @@
 						<td></td>
 						<%-- »óÇ°¸í --%>
 						<td align="left">
-							<a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo }">
+							<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">
 								${purchase.purchaseProd.prodName }
 							</a>
 						</td>

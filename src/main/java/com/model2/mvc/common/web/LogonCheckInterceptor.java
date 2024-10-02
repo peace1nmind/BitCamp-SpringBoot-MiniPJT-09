@@ -31,8 +31,9 @@ public class LogonCheckInterceptor extends HandlerInterceptorAdapter {
 	
 	///Method
 	public boolean preHandle(	HttpServletRequest request,
-														HttpServletResponse response, 
-														Object handler) throws Exception {
+								HttpServletResponse response, 
+								Object handler) 
+								throws Exception {
 		
 		System.out.println("\n[ LogonCheckInterceptor start........]");
 		

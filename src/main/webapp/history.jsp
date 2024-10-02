@@ -1,8 +1,3 @@
-<%@page import="com.model2.mvc.service.domain.Product" %>
-<%@page import="com.model2.mvc.service.TranCodeMapper"%>
-<%@page import="java.util.Map"%>
-<%@page import="com.model2.mvc.service.product.impl.ProductServiceImpl"%>
-<%@page import="com.model2.mvc.service.product.ProductService"%>
 <%@ page contentType="text/html; charset=EUC-KR" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,7 +6,10 @@
 	<head>
 	
 		<title>열어본 상품 보기</title>
-	
+		
+		<script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
+		<script type="text/javascript" src="/javascript/common.js"></script>
+		
 	</head>
 	
 	<body>
@@ -40,7 +38,7 @@
 			<tr>
 				<td>${status.count }</td>
 				<td><a href="/product/getProduct?prodNo=${product.prodNo }&menu=search"	target="rightFrame">${product.prodName }</a></td>
-				<td>${product.price }</td>
+				<td id="productPrice"><span>${product.price }</span> 원</td>
 				<td>${tranCodeMap[product.proTranCode] }</td>
 			</tr>
 		</c:forEach>

@@ -40,7 +40,7 @@ import com.model2.mvc.service.purchase.PurchaseService;
 // W 24.09.12.start 
 
 @RestController
-@RequestMapping("/json/product")
+@RequestMapping("/product/json")
 public class ProductRestController {
 
 	// Field

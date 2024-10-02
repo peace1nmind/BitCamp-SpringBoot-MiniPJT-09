@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-    
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 
 <html>
@@ -64,7 +66,10 @@
 					상품명 <img	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 				</td>
 				<td bgcolor="D6D6D6" width="1"></td>
-				<td class="ct_write01">${purchase.purchaseProd.prodName }</td>
+				<td class="ct_write01">
+					<a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo }">
+					${purchase.purchaseProd.prodName }</a>
+				</td>
 			</tr>
 			
 			<tr>
@@ -169,21 +174,26 @@
 				<td align="right">
 					<table border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<td width="17" height="23">
-								<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-							</td>
-							<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-								<a href="/purchase/updatePurchase?tranNo=${purchase.tranNo }">수정</a>
-							</td>
-							<td width="14" height="23">
-								<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-							</td>
+							<c:if test="${user.role == 'user' && purchase.tranCode < 4 }">
+								<td width="17" height="23">
+									<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
+								</td>
+							
+								<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
+									<a href="/purchase/updatePurchase?tranNo=${purchase.tranNo }">수정</a>
+								</td>
+								<td width="14" height="23">
+									<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
+								</td>
+							</c:if>
+							
 							<td width="30"></td>
+							
 							<td width="17" height="23">
 								<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 							</td>
 							<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-								<a href="/purchase/listPurchase">확인</a>
+								<a href="javascript:history.back()">확인</a>
 							</td>
 							<td width="14" height="23">
 								<img src="/images/ct_btnbg03.gif"width="14" height="23"/>

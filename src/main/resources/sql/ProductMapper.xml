@@ -174,7 +174,7 @@
 	
 	
 	<!-- updateTranCode: pro_tran_code 변경 -->
-	<update id="updateTranCode"
+	<update id="updateProTranCode"
 			parameterType="product">
 			
 		UPDATE product

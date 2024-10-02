@@ -1,12 +1,8 @@
 function history(){
 	popWin = window.open("/product/history", "popWin", 
-						"left=300, top=200, width=320, height=200, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
+						"left=300, top=200, width=400, height=500, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
 }
 		
-function linkTo(location) {
-	console.log("이동하는 링크= "+location)
-	$(window.parent.frames["rightFrame"].document.location).attr("href", location);
-}
 	
 //==> jQuery 적용 추가된 부분
 $(function() {

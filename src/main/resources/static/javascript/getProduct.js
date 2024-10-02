@@ -2,10 +2,6 @@
 
 $(function() {
 	
-	// 가격 999,999,999 형식으로 변경
-	var price = parseInt($("#productPrice > span").text());
-	$("#productPrice > span").text(price.toLocaleString());
-	
 	// 제조일자 YYYY-MM-DD 형식으로 변경
 	var manuDate = $("#productManuDate").text().replace(/\s/g, "");
 	console.log("manuDate : "+manuDate);

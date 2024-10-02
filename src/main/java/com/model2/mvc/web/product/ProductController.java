@@ -302,7 +302,11 @@ public class ProductController {
 		if (historys != null) {
 			for (String prodNo : historys) {
 			Product product = productService.getProduct(Integer.parseInt(prodNo));
-			productList.add(product);
+			
+				if (product.getProTranCode().equals("1")) {
+					productList.add(product);
+				}
+			
 			}
 		}
 		

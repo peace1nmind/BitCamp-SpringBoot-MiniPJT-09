@@ -22,7 +22,7 @@
 		<script type="text/javascript" src="/javascript/listProduct.js"></script>
 		
 		<style type="text/css">
-			span[data-prodno], #orderByPrice:hover {cursor: pointer;}
+			span[data-prodno], span[data-tranno], #orderByPrice:hover {cursor: pointer;}
 		</style>
 		
 	</head>

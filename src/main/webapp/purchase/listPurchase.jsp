@@ -36,12 +36,15 @@
 				integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" 
 				crossorigin="anonymous"></script>
     	
+    	<script type="text/javascript" src="/javascript/common.js"></script>
+    	
     	<script type="text/javascript">
 //     	<!--	
     		function fncUpdateTranCode(tranNo, tranCode) {
     			if(confirm("배송정보를 변경하시겠습니까?\n\n배송중 → 배송완료")) {
 //     				window.location.href="/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode;
-    				$("location").attr("href", "/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode);
+//     				$("location").attr("href", "/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode);
+					linkTo("/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode);
     			}
     		}
     		
@@ -107,7 +110,7 @@
 							<td></td>
 							<%-- 상품명 --%>
 							<td align="left">
-								<a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo }">
+								<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">
 									${purchase.purchaseProd.prodName }
 								</a>
 							</td>

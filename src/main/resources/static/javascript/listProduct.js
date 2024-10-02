@@ -21,13 +21,6 @@ $(function() {
 	$("form").attr("action", "/product/listProduct").attr("method", "post");
 	
 	
-	// listProduct, listSale price 값 형식 변경
-	$("#productPrice span").each(function() {
-		var price = Number($(this).text().trim()).toLocaleString();
-		$(this).text(price);
-	});
-	
-	
 	// 가격 정렬 함수
 	$("#orderByPrice").click(function() {
 		var desc = $("input[name='desc']").val();
@@ -51,10 +44,6 @@ $(function() {
 	$(".ct_list_pop span[data-prodno]:nth-child(2n+1)").click(function() {
 		var prodNo = $(this).data("prodno");
 		
-		if ($(this).data("menu") != undefined) {
-			menu = $(this).data("menu");
-		}
-		
 		console.log("listProduct - prodNo : "+prodNo);
 		var navi = (menu !=null && menu == "search")? "getProduct" : "updateProduct";
 		linkTo("/product/"+navi+"?menu=search&prodNo="+prodNo);
@@ -66,7 +55,7 @@ $(function() {
 		var prodNo = $(this).data("prodno");
 		
 		$.ajax({
-			url : "/json/product/getProduct",
+			url : "/product/json/getProduct",
 			method : "GET",
 			headers : {
 				"Accept" : "application/json",
@@ -118,6 +107,14 @@ $(function() {
 	// 검색버튼 함수
 	$(".ct_btn01").click(function() {
 		if ($(this).text().trim() == "검색"){
+			fncGetProductList();
+		}
+	});
+	
+	
+	// 엔터 검색
+	$(document).on("keydown", function(event) {
+		if (event.key == 'Enter') {
 			fncGetProductList();
 		}
 	});

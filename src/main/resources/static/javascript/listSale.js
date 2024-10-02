@@ -22,4 +22,13 @@ $(function() {
 		}
 	});
 	
+	
+	$(".ct_list_pop span[data-tranno]:nth-child(2n+1)").click(function() {
+		var tranNo = $(this).data("tranno");
+		
+		console.log("listSale - tranNo : "+tranNo);
+		
+		linkTo("/purchase/getPurchase?tranNo="+tranNo);
+	});
+	
 });

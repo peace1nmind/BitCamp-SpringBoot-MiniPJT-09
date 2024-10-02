@@ -1,7 +1,7 @@
-/* ï¿½ï¿½ï¿½ï¿½ JS */
+/* °øÅë¸ðµâ JS */
 
 function linkTo(location) {
-	console.log("ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Å©= "+location)
+	console.log("ÀÌµ¿ÇÏ´Â ¸µÅ©= "+location)
 	$(window.parent.frames["rightFrame"].document.location).attr("href", location);
 }
 
@@ -21,3 +21,13 @@ function toDateType(date) {
 		}
 	}
 }
+
+
+$(function() {
+	
+	$("#productPrice span").each(function() {
+		var price = Number($(this).text().trim()).toLocaleString();
+		$(this).text(price);
+	});
+	
+});
