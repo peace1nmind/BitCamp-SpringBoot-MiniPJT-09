@@ -12,6 +12,9 @@
 		<title>구매상세조회</title>
 		
 		<link rel="stylesheet" href="/css/admin.css" type="text/css">
+		
+		<script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
+		<script type="text/javascript" src="/javascript/common.js"></script>
 	
 	</head>
 	
@@ -107,7 +110,7 @@
 					결제금액 <img	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 				</td>
 				<td bgcolor="D6D6D6" width="1"></td>
-				<td class="ct_write01">${purchase.purchaseProd.price }</td>
+				<td class="ct_write01" id="productPrice"><span>${purchase.purchaseProd.price }</span> 원</td>
 			</tr>
 			
 			<tr>
@@ -174,7 +177,7 @@
 				<td align="right">
 					<table border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<c:if test="${user.role == 'user' && purchase.tranCode < 4 }">
+							<c:if test="${user.role == 'user' && purchase.tranCode < 3 }">
 								<td width="17" height="23">
 									<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 								</td>
@@ -193,7 +196,7 @@
 								<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 							</td>
 							<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-								<a href="javascript:history.back()">확인</a>
+								<a href="${(user.role == 'user')? '/purchase/listPurchase' : '/product/listProduct?menu=manage' }">확인</a>
 							</td>
 							<td width="14" height="23">
 								<img src="/images/ct_btnbg03.gif"width="14" height="23"/>

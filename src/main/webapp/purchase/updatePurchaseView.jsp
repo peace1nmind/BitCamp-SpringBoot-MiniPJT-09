@@ -139,7 +139,7 @@
 					
 						<input type="text" readonly="readonly" name="dlvyDate" value="${purchase.dlvyDate }" 
 								class="ct_input_g" style="width: 100px; height: 19px" maxLength="20" />
-						<%-- 임시방편으로 바꿔놓음 calendar.js 수정필요 --%>
+						
 						<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
 									onclick="show_calendar('document.updatePurchase.dlvyDate', document.updatePurchase.dlvyDate.value);dateFormate(document.updatePurchase.dlvyDate.value);"/>
 					</td>

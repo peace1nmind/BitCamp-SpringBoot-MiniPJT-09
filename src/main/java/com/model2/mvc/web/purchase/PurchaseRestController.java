@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,10 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,9 +36,9 @@ import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.user.UserService;
 
-@Controller
-@RequestMapping("/purchase/*")
-public class PurchaseController {
+@RestController
+@RequestMapping("/purchase/json/*")
+public class PurchaseRestController {
 
 	// Field
 	@Autowired
@@ -57,7 +61,7 @@ public class PurchaseController {
 	
 	
 	// Constructor
-	public PurchaseController() {
+	public PurchaseRestController() {
 		System.out.println(":: " + getClass().getSimpleName() + " default Constructor call\n");
 	}
 
@@ -65,31 +69,21 @@ public class PurchaseController {
 	// Method
 	// 구매이력 목록
 	@RequestMapping("/listPurchase")
-	public ModelAndView listPurchase(@RequestParam(value="page", required = false, defaultValue = "1") int page,
-									 @RequestParam(value="historyPage", required = false, defaultValue = "1") int historyPage,
-									 @SessionAttribute("user") User buyer,
-									 HttpSession session) {
+	public Map<String, Object> listPurchase(@RequestParam(required = false, defaultValue = "1") int page,
+									 		@RequestParam(required = false, defaultValue = "1") int historyPage,
+									 		@SessionAttribute("user") User buyer,
+									 		HttpSession session) {
 		
-		System.out.println("/listPurchase");
-		
-		ModelAndView modelAndView = new ModelAndView();
-		// Model 에 실을 map
-		Map<String, Object> modelMap = new HashMap<String, Object>();
-		
-		/* Interceptor로 변경 필요 */
-		if (buyer == null) {
-			modelAndView.setViewName("redirect:/user/login");
-		}
-		
-		
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+			
 		/* 구매이력에 관한 로직 */
 		Search search = new Search(page, pageSize);
 		Map<String, Object> map = purchaseService.getPurchaseList(search, buyer.getUserId());
 		Paging paging = new Paging((int) map.get("count"), search.getCurrentPage(), pageSize, pageUnit);
 		
-		modelMap.put("map", map);
-		modelMap.put("paging", paging);
-		modelMap.put("tranCodeMap", TranCodeMapper.getInstance().getMap());
+		responseMap.put("map", map);
+		responseMap.put("paging", paging);
+		responseMap.put("tranCodeMap", TranCodeMapper.getInstance().getMap());
 		
 		
 		/* listPurchaseHistory 로직 */
@@ -97,106 +91,91 @@ public class PurchaseController {
 		Map<String, Object> historyMap = purchaseService.getPurchaseHistoryList(historySearch, buyer.getUserId());
 		Paging historyPaging = new Paging((int) historyMap.get("count"), historySearch.getCurrentPage(), pageSize, pageUnit);
 		
-		modelMap.put("historyMap", historyMap);
-		modelMap.put("historyPaging", historyPaging);
+		responseMap.put("historyMap", historyMap);
+		responseMap.put("historyPaging", historyPaging);
 		
-		modelAndView.setViewName("forward:/purchase/listPurchase.jsp");
-		modelAndView.addAllObjects(modelMap);
-		
-		return modelAndView;
+		return responseMap;
 	}
 	
 	
 	// 구매
 	@GetMapping(value="/addPurchase", params = "prodNo")
-	public ModelAndView addPurchase(@RequestParam("prodNo") int prodNo) 
-									throws Exception {
+	public Map<String, Object> addPurchase(@RequestParam int prodNo) 
+										   throws Exception {
 		
-		System.out.println("/addPurchase GET");
-		
-		ModelAndView modelAndView = new ModelAndView();
-		
-		modelAndView.setViewName("forward:/purchase/addPurchaseView.jsp");
+		Map<String, Object> responseMap = new HashMap<String, Object>();
 		
 		Product product = productService.getProduct(prodNo);
-		modelAndView.addObject("product", product);
+		responseMap.put("product", product);
 		
-		return modelAndView;
-		
-		
+		return responseMap;
 	}
 	
-	@PostMapping("/addPurchase")
-	public ModelAndView addPurcahse(@ModelAttribute Purchase purchase) 
-									throws Exception {
+	
+	/* Header에 Content-Type : application/json; charset=UTF-8 필요 */
+	@PostMapping(value="/addPurchase")
+	public Map<String, Object> addPurcahse(@RequestBody Purchase purchase) throws Exception {
 		
 		System.out.println("/addPurchase POST");
 		
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("forward:/purchase/addPurchase.jsp");
+		Map<String, Object> responseMap = new HashMap<String, Object>();
 		
 		purchase = purchaseService.addPurchase(purchase);
 		
-		modelAndView.addObject("purchase", purchase);
+		System.out.println(purchase);
 		
-		return modelAndView;
+		responseMap.put("purchase", purchase);
+		
+		return responseMap;
 	}
 	
 	
 	// 구매정보
-	@RequestMapping(value="/getPurchase", params = "tranNo")
-	public ModelAndView getPurchase(@RequestParam("tranNo") int tranNo) {
+	@GetMapping(value="/getPurchase", params = "tranNo")
+	public Map<String, Object> getPurchase(@RequestParam int tranNo) {
 		
-		// TODO interceptor 필요
+		Map<String, Object> responseMap = new HashMap<String, Object>();
 		
-		System.out.println("/getPurchase");
+		responseMap.put("purchase", purchaseService.getPurchase(tranNo));
 		
-		ModelAndView modelAndView = new ModelAndView("forward:/purchase/getPurchase.jsp");
-		modelAndView.addObject("purchase", purchaseService.getPurchase(tranNo));
-		
-		return modelAndView;
+		return responseMap;
 	}
 	
 	
 	// 구매정보 변경
 	@GetMapping(value="/updatePurchase", params = "tranNo")
-	public ModelAndView updatePurchase(@RequestParam("tranNo") int tranNo) {
+	public Map<String, Object> updatePurchase(@RequestParam int tranNo) {
 		
-		System.out.println("/updatePurchase GET");
+		Map<String, Object> responseMap = new HashMap<String, Object>();
 		
-		ModelAndView modelAndView = new ModelAndView("forward:/purchase/updatePurchaseView.jsp");
-		modelAndView.addObject("purchase", purchaseService.getPurchase(tranNo));
+		responseMap.put("purchase", purchaseService.getPurchase(tranNo));
 		
-		return modelAndView;
+		return responseMap;
 	}
 	
 	@PostMapping("/updatePurchase")
-	public ModelAndView updatePurchase(@ModelAttribute("purchase") Purchase purchase) {
+	public Map<String, Object> updatePurchase(@RequestBody Purchase purchase) {
 		
-		System.out.println("/updatePurchase POST");
+		Map<String, Object> responseMap = new HashMap<String, Object>();
 		
-		ModelAndView modelAndView = new ModelAndView("forward:/purchase/updatePurchase.jsp");
+		responseMap.put("purchase", purchaseService.updatePurchase(purchase));
 		
-		modelAndView.addObject("purchase", purchaseService.updatePurchase(purchase));
-		
-		return modelAndView;
+		return responseMap;
 	}
 	
 	
 	// 배송하기, 물건도착
 	// listSale (관리자)에서 배송하기 요청
-	@RequestMapping("updateTranCode")
-	public ModelAndView updateTranCode(@RequestParam int tranNo,
-									   @RequestParam String tranCode) {
+	@GetMapping("updateTranCode")
+	public Map<String, Object> updateTranCode(@RequestParam int tranNo,
+									   		  @RequestParam String tranCode) {
 		
 		System.out.println("/updateTranCode?tranNo="+tranNo);
 		
-		System.out.println(tranCode);
-		
-		ModelAndView modelAndView = new ModelAndView();
+		Map<String, Object> responseMap = new HashMap<String, Object>();
 		
 		if (tranCode.equals("3")) {	// 배송하기
-			modelAndView.setViewName("redirect:/product/listProduct?menu=manage");
+			responseMap.put("link" ,"redirect:/product/listProduct?menu=manage");
 			
 			Purchase purchase = purchaseService.getPurchase(tranNo);
 			
@@ -204,7 +183,7 @@ public class PurchaseController {
 			productService.updateTranCode(purchase.getPurchaseProd().getProdNo(), tranCode);
 			
 		} else if (tranCode.equals("4") || tranCode.equals("5")) {	// 물건도착, 구매확정
-			modelAndView.setViewName("redirect:/purchase/listPurchase");
+			responseMap.put("link" ,"redirect:/purchase/listPurchase");
 			
 			Purchase purchase = purchaseService.getPurchase(tranNo);
 			
@@ -212,7 +191,7 @@ public class PurchaseController {
 			productService.updateTranCode(purchase.getPurchaseProd().getProdNo(), tranCode);
 		}
 		
-		return modelAndView;
+		return responseMap;
 	}
 
 }

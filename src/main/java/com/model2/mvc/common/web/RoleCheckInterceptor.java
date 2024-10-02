@@ -29,7 +29,8 @@ public class RoleCheckInterceptor implements HandlerInterceptor {
 		// menu, fnc, user.role
 		
 		String uri = request.getRequestURI();
-		System.out.println(uri);
+		String method = request.getMethod();
+		System.out.println(uri+" "+method);
 		
 		// product interceptor
 		if (uri.contains("product")) {
@@ -39,16 +40,33 @@ public class RoleCheckInterceptor implements HandlerInterceptor {
 		// purchase interceptor
 		else if (uri.contains("purchase")) {
 			
-			if (uri.indexOf("listPurchase") != -1) {
-				if (user == null || !user.getRole().equals("user")) {
-					
-					System.out.println("Error : 로그인한 회원만 구매이력을 볼 수 있습니다.");
-					request.getRequestDispatcher("/").forward(request, response);
-					System.out.println("\n=========================\n");
-					
-					return false; 
-				}
-			}
+//			if (user == null) {
+//				System.out.println("Error : 비로그인 상태, purchase 진입");
+//				response.sendRedirect("/user/login");
+//				System.out.println("\n=========================\n");
+//				
+//				return false; 
+//			}
+			
+//			if (uri.indexOf("listPurchase") != -1) {
+//				
+//				if (user == null) {
+//					System.out.println("Error : 로그인한 회원만 구매이력을 볼 수 있습니다.");
+//					response.sendRedirect("/user/login");
+//					System.out.println("\n=========================\n");
+//					
+//					return false; 
+//				}
+//				
+//				else if (!user.getRole().equals("user")) {
+//					
+//					System.out.println("Error : 일반 회원만 구매이력을 볼 수 있습니다.");
+//					response.sendRedirect("/");
+//					System.out.println("\n=========================\n");
+//					
+//					return false; 
+//				}
+//			}
 			
 		}
 		

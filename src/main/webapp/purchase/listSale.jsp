@@ -78,7 +78,7 @@
 					<td></td>
 					<%-- 상품명 --%>
 					<td align="left">
-						<span data-tranno="${purchase.tranNo }">${purchase.purchaseProd.prodName }</span>
+						<span class="getPurchase" data-tranno="${purchase.tranNo }">${purchase.purchaseProd.prodName }</span>
 					</td>
 
 					<td></td>
@@ -107,7 +107,7 @@
 					<td align="left" class="dlvyInfo">
 						<c:if test="${menu=='manage' && purchase.purchaseProd.proTranCode=='2' }">
 							&nbsp;
-							<span data-prodno="${purchase.purchaseProd.prodNo }">배송하기</span> 
+							<span data-tranno="${purchase.tranNo }">배송하기</span> 
 						</c:if>
 					</td>
 				</tr>

@@ -10,7 +10,7 @@
 	<!-- TypeHandler가 필요하다 -->
 	<!-- 		<result property="purchaseProd.prodNo" 	column="prod_no" 			jdbcType="INTEGER"/> -->
 	<!-- 		<result property="buyer.userId" 		column="buyer_id" 			jdbcType="VARCHAR"/> -->
-	<resultMap type="purchase" id="purchaseSelectMap">
+	<resultMap type="com.model2.mvc.service.domain.Purchase" id="purchaseSelectMap">
 		<id 	property="tranNo" 				column="tran_no" 			jdbcType="INTEGER"/>
 		<result property="paymentOption" 		column="payment_option" 	jdbcType="CHAR"/>
 		<result property="receiverName" 		column="receiver_name" 		jdbcType="VARCHAR"/>
@@ -239,7 +239,7 @@
 	
 	<!-- updatePurchase: 구매정보 수정 -->
 	<update id="updatePurchase"
-			parameterType="purchase">
+			parameterType="com.model2.mvc.service.domain.Purchase">
 	
 		UPDATE transaction
 		
@@ -259,7 +259,7 @@
 	
 	<!-- updateTranStatusCode: tranCode 수정 -->
 	<update id="updateTranStatusCode"
-			parameterType="purchase">
+			parameterType="com.model2.mvc.service.domain.Purchase">
 		
 		UPDATE transaction
 		SET tran_status_code = #{tranCode:CHAR}

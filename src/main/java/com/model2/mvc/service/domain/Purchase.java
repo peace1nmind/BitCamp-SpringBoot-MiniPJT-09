@@ -25,64 +25,38 @@ public class Purchase {
 	private Date orderDate;			// ORDER_DATE			구매 일자
 	private String dlvyDate;		// DLVY_DATE			배송 희망 일자
 	//														(배송이 완료되면 배송된 날짜로 변경하기)
-
-//	@Autowired
-//	@Qualifier("productDaoImpl")
-//	private ProductDao productDao;
-//	
-//	@Autowired
-//	@Qualifier("userDaoImpl")
-//	private UserDao userDao;
-//	
-//	public void setProductDao(ProductDao productDao) {
-//		this.productDao = productDao;
-//	}
-//
-//	public void setUserDao(UserDao userDao) {
-//		this.userDao = userDao;
-//	}
-//	
-//	private int prodNo;
-//	private String buyerId;
-//	
-//	public int getProdNo() {
-//		return prodNo;
-//	}
-//
-//	public void setProdNo(int prodNo) {
-//		this.prodNo = prodNo;
-//		try {
-//			purchaseProd = productDao.selectProduct(prodNo);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			
-//		}
-//	}
-//
-//	public String getBuyerId() {
-//		return buyerId;
-//	}
-//
-//	public void setBuyerId(String buyerId) {
-//		this.buyerId = buyerId;
-//		try {
-//			buyer = userDao.getUser(buyerId);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			
-//		}
-//	}
-
+	private int prodNo;
+	private String buyerId;
+	
+	
 	// Constructor
 	public Purchase() {
 	}
 	
-	public Purchase(User user, Product product) {
-		buyer = user;
+	public Purchase(User buyer, Product product) {
+		this.buyer = buyer;
 		purchaseProd = product;
 	}
 
 	// Method
+	public int getProdNo() {
+		return prodNo;
+	}
+
+	public void setProdNo(int prodNo) {
+		this.prodNo = prodNo;
+		purchaseProd = new Product(prodNo);
+	}
+
+	public String getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(String buyerId) {
+		this.buyerId = buyerId;
+		buyer = new User(buyerId);
+	}
+
 	public int getTranNo() {
 		return tranNo;
 	}

@@ -14,19 +14,20 @@ function fncGetSaleList(page) {
 $(function() {
 	
 	$(".dlvyInfo span").click(function() {
-		var prodNo = $(this).data("prodno");
-		console.log("listSale - prodNo : "+prodNo);
+		var tranNo = $(this).data("tranno");
+		console.log("updateTranCode - tranNo : "+tranNo);
 		
 		if ($(this).text()=="배송하기") {
-			linkTo("/purchase/updateTranCode?tranCode=3&prodNo="+prodNo);
+			linkTo("/purchase/updateTranCode?tranCode=3&tranNo="+tranNo);
 		}
 	});
 	
 	
-	$(".ct_list_pop span[data-tranno]:nth-child(2n+1)").click(function() {
+	$(".getPurchase").click(function() {
 		var tranNo = $(this).data("tranno");
 		
 		console.log("listSale - tranNo : "+tranNo);
+		console.log($(this).text());
 		
 		linkTo("/purchase/getPurchase?tranNo="+tranNo);
 	});

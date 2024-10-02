@@ -151,7 +151,7 @@
 								<c:choose>
 								
 									<c:when test="${purchase.tranCode == 3 }">
-										<a onclick="fncUpdateTranCode(${purchase.tranNo}, 4)">물건도착</a>
+										<a href="javascript:fncUpdateTranCode(${purchase.tranNo}, 4)">물건도착</a>
 									</c:when>
 									
 									<%-- 정보수정 : 배송완료전이면 배송지 수정하게끔 **4=배송완료 --%>
@@ -184,53 +184,6 @@
 					</c:if>
 					
 				</table>
-				
-<!-- 				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;"> -->
-					
-<!-- 					<tr> -->
-<!-- 						<td align="center"> -->
-					
-<!-- 							<a href="/purchase/listPurchase?page=1" -->
-<%-- 							${(paging.left)? "":"class='disabled'" }> --%>
-<!-- 								<span>◀</span> -->
-<!-- 							</a> -->
-							
-<!-- 							&nbsp; -->
-							
-<%-- 							<a href="/purchase/listPurchase?page=${paging.start - 1 }" --%>
-<%-- 							${(paging.left)? "":"class='disabled'" }> --%>
-<!-- 								<span>이전</span> -->
-<!-- 							</a> -->
-					
-<!-- 							&nbsp;&nbsp; -->
-						
-<%-- 							<c:forEach begin="${paging.start }" end="${paging.end }" varStatus="status"> --%>
-<%-- 								<a href="/purchase/listPurchase?page=${status.count }"  --%>
-<%-- 								${(paging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }> --%>
-<%-- 									${status.count } --%>
-<!-- 								</a>  -->
-<%-- 							</c:forEach> --%>
-
-<!-- 							&nbsp;&nbsp; -->
-							
-<%-- 							<a href="/purchase/listPurchase?page=${paging.end + 1 }" --%>
-<%-- 							${(paging.right)? "":"class='disabled'" }> --%>
-<!-- 								<span>다음</span> -->
-<!-- 							</a> -->
-							
-<!-- 							&nbsp; -->
-							
-<%-- 							<a href="/purchase/listPurchase?page=${paging.totalPage }" --%>
-<%-- 							${(paging.right)? "":"class='disabled'" }> --%>
-<!-- 								<span>▶</span> -->
-<!-- 							</a> -->
-					
-<!-- 						</td> -->
-<!-- 					</tr> -->
-					
-<!-- 				</table> -->
-			
-			<!--  페이지 Navigator 끝 -->
 			
 			<input type="hidden" name="page" value="${paging.currentPage}">
 			<jsp:include page="../common/pagingNavigator.jsp"></jsp:include>
