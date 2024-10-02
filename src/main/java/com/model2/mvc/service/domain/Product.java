@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.model2.mvc.service.TranCodeMapper;
 
 public class Product {
-
+	
 	private int prodNo;
 	private String prodName;
 	private String prodDetail;
