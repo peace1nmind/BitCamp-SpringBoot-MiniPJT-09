@@ -14,49 +14,20 @@
 		<title>구매목록 조회</title>
 	
 		<link rel="stylesheet" href="/css/admin.css" type="text/css">
-	
-		<script type="text/javascript">
-			function fncGetUserList() {
-				document.detailForm.submit();
-			}
-			
-		</script>
+		<link rel="stylesheet" href="/css/commonCSS.css" type="text/css">
 		
-		<style>
-	        a.disabled {
-	            pointer-events: none; /* 링크 클릭 비활성화 */
-	            color: #FFFFFF; /* 비활성화 된 링크의 색상 변경 */
-	            text-decoration: none; /* 링크 밑줄 제거 */
-	            cursor: default; /* 기본 커서로 변경 */
-	        }
-	        
-    	</style>
-    	
-    	<script src="https://code.jquery.com/jquery-2.2.4.js" 
+		<script src="https://code.jquery.com/jquery-2.2.4.js" 
 				integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" 
 				crossorigin="anonymous"></script>
-    	
-    	<script type="text/javascript" src="/javascript/common.js"></script>
-    	
-    	<script type="text/javascript">
-//     	<!--	
-    		function fncUpdateTranCode(tranNo, tranCode) {
-    			if(confirm("배송정보를 변경하시겠습니까?\n\n배송중 → 배송완료")) {
-//     				window.location.href="/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode;
-//     				$("location").attr("href", "/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode);
-					linkTo("/purchase/updateTranCode?tranNo="+tranNo+"&tranCode="+tranCode);
-    			}
-    		}
-    		
-    		$("form").attr("action", "/product/listProduct").attr("method", "podst");
-//     	-->
-    	</script>
+		
+		<script type="text/javascript" src="/javascript/common.js"></script>
+		<script type="text/javascript" src="/javascript/listPurchase.js"></script>
 		
 	</head>
 	
 	<body bgcolor="#ffffff" text="#000000">
 		
-		<form name="detailForm" action="/purchase/listPurchase" method="post">
+		<form name="detailForm">
 			
 			<div style="width: 98%; margin-left: 10px;">
 			
@@ -110,9 +81,10 @@
 							<td></td>
 							<%-- 상품명 --%>
 							<td align="left">
-								<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">
-									${purchase.purchaseProd.prodName }
-								</a>
+<%-- 								<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }"> --%>
+<%-- 									${purchase.purchaseProd.prodName } --%>
+<!-- 								</a> -->
+								<span class="getPurchase" data-tranno="${purchase.tranNo }">${purchase.purchaseProd.prodName }</span>
 							</td>
 							
 							<td></td>
@@ -151,15 +123,17 @@
 								<c:choose>
 								
 									<c:when test="${purchase.tranCode == 3 }">
-										<a href="javascript:fncUpdateTranCode(${purchase.tranNo}, 4)">물건도착</a>
+<%-- 										<a href="javascript:fncUpdateTranCode(${purchase.tranNo}, 4)">물건도착</a> --%>
+										<span class="updateTranCode" data-tranno="${purchase.tranNo }" data-trancode="4">물건도착</span>
 									</c:when>
 									
 									<%-- 정보수정 : 배송완료전이면 배송지 수정하게끔 **4=배송완료 --%>
 									<c:when test="${purchase.tranCode > 1 && purchase.tranCode < 4 }">
 									
-										<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">
-											배송정보 확인
-										</a>
+<%-- 										<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }"> --%>
+<!-- 											배송정보 확인 -->
+<!-- 										</a> -->
+										<span class="getPurchase" data-tranno="${purchase.tranNo }">배송정보 확인</span>
 										
 									</c:when>
 

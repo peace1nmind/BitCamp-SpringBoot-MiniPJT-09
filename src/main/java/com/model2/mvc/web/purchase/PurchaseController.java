@@ -65,8 +65,8 @@ public class PurchaseController {
 	// Method
 	// 구매이력 목록
 	@RequestMapping("/listPurchase")
-	public ModelAndView listPurchase(@RequestParam(value="page", required = false, defaultValue = "1") int page,
-									 @RequestParam(value="historyPage", required = false, defaultValue = "1") int historyPage,
+	public ModelAndView listPurchase(@RequestParam(required = false, defaultValue = "1") int page,
+									 @RequestParam(required = false, defaultValue = "1") int historyPage,
 									 @SessionAttribute("user") User buyer,
 									 HttpSession session) {
 		

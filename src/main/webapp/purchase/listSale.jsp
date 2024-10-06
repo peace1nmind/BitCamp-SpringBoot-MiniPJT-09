@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+	pageEncoding="EUC-KR" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -18,7 +18,7 @@
 	integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
 	crossorigin="anonymous"></script>
 
-<script type="text/javascript" src="/javascript/common.js"></script>
+<script type="text/javascript" src="/javascript/paging.js"></script>
 <script type="text/javascript" src="/javascript/listSale.js"></script>
 
 </head>
@@ -130,32 +130,60 @@
 			</tr>
 		</c:if>
 
-		<input type="hidden" name="salePage" value="${salePaging.currentPage}"
-			id="page2">
+		<input type="hidden" name="salePage" value="${salePaging.currentPage}" id="page2">
 
 		<table width="100%" border="0" cellspacing="0" cellpadding="0"
-			style="margin-top: 10px;">
+			style="margin-top: 10px;" id="salePaging">
 
 			<tr>
-				<td align="center"><a href="javascript:fncGetSaleList(1)"
-					${(salePaging.left)? "":"style='visibility:hidden'" }> <span>◀</span>
-				</a> &nbsp; <a
-					href="javascript:fncGetSaleList('${salePaging.start - 1 }')"
-					${(salePaging.left)? "":"style='visibility:hidden'" }> <span>이전</span>
-				</a> &nbsp;&nbsp; <c:forEach begin="${salePaging.start }"
-						end="${salePaging.end }" varStatus="status">
+				<td align="center">
+<!-- 					<a href="javascript:fncGetSaleList(1)" -->
+<%-- 						${(salePaging.left)? "":"style='visibility:hidden'" }>  --%>
+					<a id="fistPage"
+						${(salePaging.left)? "":"style='visibility:hidden'" }> 
+					<span>◀</span>
+					</a> 
+					
+					&nbsp; 
+					
+<%-- 					<a href="javascript:fncGetSaleList('${salePaging.start - 1 }')" --%>
+<%-- 						${(salePaging.left)? "":"style='visibility:hidden'" }> --%>
+					<a id ="prevPage" data-page="${salePaging.start - 1 }" 
+						${(salePaging.left)? "":"style='visibility:hidden'" }> 
+						<span>이전</span>
+					</a> 
+					
+					&nbsp;&nbsp; 
+					
+					<c:forEach begin="${salePaging.start }" end="${salePaging.end }" varStatus="status">
 
-						<a href="javascript:fncGetSaleList('${status.count }')"
+<%-- 						<a href="javascript:fncGetSaleList('${status.count }')" --%>
+<%-- 							${(salePaging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }> --%>
+						<a id="goPage" data-page="${status.count }"
 							${(salePaging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }>
-							${status.count } </a>
+							<span>${status.count }</span> 
+						</a>
 
-					</c:forEach> &nbsp;&nbsp; <a
-					href="javascript:fncGetSaleList('${salePaging.end + 1 }')"
-					${(salePaging.right)? "":"style='visibility:hidden'" }>> <span>다음</span>
-				</a> &nbsp; <a
-					href="javascript:fncGetSaleList('${salePaging.totalPage }')"
-					${(salePaging.right)? "":"style='visibility:hidden'" }> <span>▶</span>
-				</a></td>
+					</c:forEach> 
+					
+					&nbsp;&nbsp; 
+					
+<%-- 					<a href="javascript:fncGetSaleList('${salePaging.end + 1 }')" --%>
+<%-- 						${(salePaging.right)? "":"style='visibility:hidden'" }>  --%>
+					<a id="nextPage" data-page="${salePaging.end + 1 }"
+						${(salePaging.right)? "":"style='visibility:hidden'" }> 
+						<span>다음</span>
+					</a> 
+					
+					&nbsp; 
+<%-- 					<a href="javascript:fncGetSaleList('${salePaging.totalPage }')" --%>
+<%-- 						${(salePaging.right)? "":"style='visibility:hidden'" }>  --%>
+					<a id="lastPage" data-page="${salePaging.totalPage }"
+						${(salePaging.right)? "":"style='visibility:hidden'" }> 
+						<span>▶</span>
+					</a>
+					
+				</td>
 			</tr>
 
 		</table>

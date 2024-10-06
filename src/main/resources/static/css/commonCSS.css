@@ -1,4 +1,4 @@
 @charset "EUC-KR";
 
 /* 버튼 커서 */
-.ct_btn01:hover {cursor: pointer;}
+span:hover, .ct_btn01:hover {cursor: pointer;}

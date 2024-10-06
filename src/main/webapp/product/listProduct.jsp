@@ -28,6 +28,7 @@
 	</head>
 
 	<body bgcolor="#ffffff" text="#000000">
+	
 		<form name="detailForm">
 			
 			<div style="width:98%; margin-left:10px;">

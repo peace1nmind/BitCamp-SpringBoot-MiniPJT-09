@@ -11,6 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.model2.mvc.service.domain.User;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 public class RoleCheckInterceptor implements HandlerInterceptor {
 
 	public RoleCheckInterceptor() {

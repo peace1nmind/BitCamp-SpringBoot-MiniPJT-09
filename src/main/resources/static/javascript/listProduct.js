@@ -77,7 +77,7 @@ $(function() {
 								"</tr>"+
 								"<tr>"+
 									"<td>상품상세정보</td>"+
-									"<td>"+product.prodDetail+"</td>"+
+									"<td>"+((product.prodDetail == null)? "&nbsp;": product.prodDetail)+"</td>"+
 								"</tr>"+
 								"<tr>"+
 									"<td>제조일자</td>"+
@@ -89,7 +89,7 @@ $(function() {
 								"</tr>"+
 								"<tr>"+
 									"<td>등록일자</td>"+
-									"<td>"+product.regDate+"</td>"+
+									"<td>"+((product.regDate == null)? "&nbsp;" : product.regDate)+"</td>"+
 								"</tr>"+
 							"</table>";
 

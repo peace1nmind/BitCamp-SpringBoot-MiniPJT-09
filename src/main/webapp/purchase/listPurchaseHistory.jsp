@@ -7,8 +7,6 @@
     
 <!DOCTYPE html>
 
-
-
 <html>
 
 	<head>
@@ -16,30 +14,14 @@
 		<title>배송완료목록 조회</title>
 	
 		<link rel="stylesheet" href="/css/admin.css" type="text/css">
-	
-		<script type="text/javascript">
+		<link rel="stylesheet" href="/css/commonCSS.css" type="text/css">
 		
-			function fncGetHistoryList(page) {
-				
-				if (page != null && page != 0) {
-					$("input[name='historyPage']").val(page);
-				}
-				
-				$("form").submit();
-				
-			}
-			
-		</script>
+		<script src="https://code.jquery.com/jquery-2.2.4.js" 
+				integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" 
+				crossorigin="anonymous"></script>
 		
-		<style>
-	        a.disabled {
-	            pointer-events: none; /* 링크 클릭 비활성화 */
-	            color: #FFFFFF; /* 비활성화 된 링크의 색상 변경 */
-	            text-decoration: none; /* 링크 밑줄 제거 */
-	            cursor: default; /* 기본 커서로 변경 */
-	        }
-	        
-    	</style>
+		<script type="text/javascript" src="/javascript/paging.js"></script>
+		<script type="text/javascript" src="/javascript/listPurchaseHistory.js"></script>
 		
 	</head>
 	
@@ -80,9 +62,10 @@
 						<td></td>
 						<%-- 상품명 --%>
 						<td align="left">
-							<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }">
-								${purchase.purchaseProd.prodName }
-							</a>
+<%-- 							<a href="/purchase/getPurchase?tranNo=${purchase.tranNo }"> --%>
+<%-- 								${purchase.purchaseProd.prodName } --%>
+<!-- 							</a> -->
+							<span class="getPurchase" data-tranno="${purchase.tranNo }">${purchase.purchaseProd.prodName }</span>
 						</td>
 						
 						<td></td>
@@ -119,9 +102,10 @@
 						<td align="left">
 						
 							<c:if test="${purchase.tranCode=='4' }">
-								<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=5">
-									구매확정
-								</a>
+<%-- 								<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=5"> --%>
+<!-- 									구매확정 -->
+<!-- 								</a> -->
+								<span class="updateTranCode" data-tranno="${purchase.tranNo }" data-trancode="5">구매확정</span>
 							</c:if>
 							
 						</td>
@@ -147,20 +131,24 @@
 			
 			<input type="hidden" name="historyPage" value="${historyPaging.currentPage}">
 			
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;" id="historyPaging">
 
 				<tr>
 					<td align="center">
 					
-						<a href="javascript:fncGetHistoryList(1)"
-							${(historyPaging.left)? "":"class='disabled'" }>
+<!-- 						<a href="javascript:fncGetHistoryList(1)" -->
+<%-- 							${(historyPaging.left)? "":"style='visibility:hidden'" }> --%>
+						<a id="firstPage"
+							${(historyPaging.left)? "":"style='visibility:hidden'" }>
 							<span>◀</span>
 						</a>
 	
 						&nbsp;
 						
-						<a href="javascript:fncGetHistoryList('${historyPaging.start - 1 }')"
-							${(historyPaging.left)? "":"class='disabled'" }>
+<%-- 						<a href="javascript:fncGetHistoryList('${historyPaging.start - 1 }')" --%>
+<%-- 							${(historyPaging.left)? "":"style='visibility:hidden'" }> --%>
+						<a id ="prevPage" data-page="${historyPaging.start - 1 }" 
+							${(historyPaging.left)? "":"style='visibility:hidden'" }> 
 							<span>이전</span>
 						</a>
 	
@@ -168,24 +156,30 @@
 	
 						<c:forEach begin="${historyPaging.start }" end="${historyPaging.end }" varStatus="status">
 							
-							<a href="javascript:fncGetHistoryList('${status.count }')" 
+<%-- 							<a href="javascript:fncGetHistoryList('${status.count }')"  --%>
+<%-- 								${(historyPaging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }> --%>
+							<a id="goPage" data-page="${status.count }"
 								${(historyPaging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }>
-								${status.count }
+								<span>${status.count }</span>
 							</a>
 	
 						</c:forEach>
 	
 						&nbsp;&nbsp;
 						
-						<a href="javascript:fncGetHistoryList('${historyPaging.end + 1 }')" 
-							${(historyPaging.right)? "":"class='disabled'" }>>
+<%-- 						<a href="javascript:fncGetHistoryList('${historyPaging.end + 1 }')"  --%>
+<%-- 							${(historyPaging.right)? "":"style='visibility:hidden'" }>> --%>
+						<a id="nextPage" data-page="${historyPaging.end + 1 }"
+							${(historyPaging.right)? "":"style='visibility:hidden'" }> 
 							<span>다음</span>
 						</a>
 	
 						&nbsp;
 						
-						<a href="javascript:fncGetHistoryList('${historyPaging.totalPage }')"
-							${(historyPaging.right)? "":"class='disabled'" }>
+<%-- 						<a href="javascript:fncGetHistoryList('${historyPaging.totalPage }')" --%>
+<%-- 							${(historyPaging.right)? "":"style='visibility:hidden'" }> --%>
+						<a id="lastPage" data-page="${historyPaging.totalPage }"
+							${(historyPaging.right)? "":"style='visibility:hidden'" }> 
 							<span>▶</span>
 						</a>
 						
